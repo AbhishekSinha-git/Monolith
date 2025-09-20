@@ -57,7 +57,7 @@ const Dashboard = () => {
           <CardContent>
             <div className="flex items-center justify-between">
               <div>
-            <div className="text-2xl font-bold">$0</div>
+            <div className="text-2xl font-bold">₹0</div>
             <div className="flex items-center text-sm text-muted-foreground">
               <ArrowUp className="h-3 w-3 mr-1" />
               Connect accounts to see data
@@ -73,7 +73,7 @@ const Dashboard = () => {
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$0</div>
+            <div className="text-2xl font-bold">₹0</div>
             <div className="flex items-center text-sm text-muted-foreground">
               <ArrowDown className="h-3 w-3 mr-1" />
               Connect accounts to see data
@@ -87,7 +87,7 @@ const Dashboard = () => {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$0</div>
+            <div className="text-2xl font-bold">₹0</div>
             <div className="flex items-center text-sm text-muted-foreground">
               <ArrowUp className="h-3 w-3 mr-1" />
               Connect accounts to see data

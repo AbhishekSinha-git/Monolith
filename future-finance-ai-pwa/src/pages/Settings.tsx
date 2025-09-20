@@ -92,11 +92,11 @@ const Settings = () => {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" defaultValue="John" />
+                  <Input id="firstName" placeholder="Enter your first name" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" defaultValue="Doe" />
+                  <Input id="lastName" placeholder="Enter your last name" />
                 </div>
               </div>
 
@@ -107,7 +107,7 @@ const Settings = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number</Label>
-                <Input id="phone" placeholder="+1 (555) 000-0000" />
+                <Input id="phone" placeholder="Enter your phone number" />
               </div>
 
               <Button onClick={handleSaveProfile}>Save Changes</Button>
@@ -177,7 +177,7 @@ const Settings = () => {
                   <div>
                     <h4 className="font-medium">Large Purchase Alerts</h4>
                     <p className="text-sm text-muted-foreground">
-                      Alert me for purchases over $500
+                      Get notified about large transactions
                     </p>
                   </div>
                   <Switch defaultChecked />
@@ -326,18 +326,15 @@ const Settings = () => {
 
               <div className="space-y-2">
                 <Label>Currency</Label>
-                <select className="w-full p-2 border rounded-md">
-                  <option value="USD">US Dollar (USD)</option>
-                  <option value="EUR">Euro (EUR)</option>
-                  <option value="GBP">British Pound (GBP)</option>
-                  <option value="CAD">Canadian Dollar (CAD)</option>
+                <select className="w-full p-2 border rounded-md" disabled>
+                  <option value="INR">Indian Rupee (₹)</option>
                 </select>
+                <p className="text-xs text-muted-foreground">Currently supporting INR only</p>
               </div>
 
               <div className="space-y-2">
                 <Label>Date Format</Label>
                 <select className="w-full p-2 border rounded-md">
-                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
                   <option value="DD/MM/YYYY">DD/MM/YYYY</option>
                   <option value="YYYY-MM-DD">YYYY-MM-DD</option>
                 </select>

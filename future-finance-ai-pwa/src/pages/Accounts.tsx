@@ -136,7 +136,7 @@ const Accounts = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  ${totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  ₹{totalBalance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   Across all connected accounts
@@ -211,8 +211,8 @@ const Accounts = () => {
                           <div className={`text-lg font-semibold ${
                             account.balance < 0 ? 'text-red-600' : 'text-foreground'
                           }`}>
-                            {account.balance < 0 ? '-' : ''}$
-                            {Math.abs(account.balance).toLocaleString('en-US', { 
+                            {account.balance < 0 ? '-' : ''}₹
+                            {Math.abs(account.balance).toLocaleString('en-IN', { 
                               minimumFractionDigits: 2 
                             })}
                           </div>
@@ -253,10 +253,14 @@ const Accounts = () => {
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { name: 'Bank of America', logo: '🏦' },
-                  { name: 'Wells Fargo', logo: '🏛️' },
-                  { name: 'American Express', logo: '💳' },
-                  { name: 'Vanguard', logo: '📈' },
+                  { name: 'HDFC Bank', logo: '🏦' },
+                  { name: 'ICICI Bank', logo: '�️' },
+                  { name: 'Axis Bank', logo: '💳' },
+                  { name: 'SBI', logo: '�' },
+                  { name: 'Kotak Bank', logo: '🏛️' },
+                  { name: 'NSDL', logo: '�' },
+                  { name: 'CDSL', logo: '📊' },
+                  { name: 'EPFO', logo: '�' },
                 ].map((institution, index) => (
                   <Button
                     key={index}
