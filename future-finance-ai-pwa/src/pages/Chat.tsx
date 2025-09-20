@@ -16,14 +16,7 @@ interface Message {
 }
 
 const Chat = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      content: "Hello! I'm Monolith AI, your intelligent financial assistant. To provide you with personalized insights and advice, I'll need access to your financial data. Please connect your accounts first, and then I can help you with budgeting, investment strategies, savings goals, and financial optimization. How can I assist you today?",
-      isUser: false,
-      timestamp: new Date(),
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);

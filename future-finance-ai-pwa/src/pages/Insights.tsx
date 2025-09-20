@@ -15,34 +15,68 @@ import {
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, AreaChart, Area } from 'recharts';
 
-const spendingTrendData = [
-  { month: 'Jan', amount: 2100 },
-  { month: 'Feb', amount: 2300 },
-  { month: 'Mar', amount: 1950 },
-  { month: 'Apr', amount: 2400 },
-  { month: 'May', amount: 2200 },
-  { month: 'Jun', amount: 2250 },
-];
+import { useState, useEffect } from 'react';
 
-const categorySpendingData = [
-  { category: 'Housing', amount: 1200, budget: 1300, percentage: 92 },
-  { category: 'Food', amount: 400, budget: 450, percentage: 89 },
-  { category: 'Transport', amount: 300, budget: 350, percentage: 86 },
-  { category: 'Entertainment', amount: 200, budget: 180, percentage: 111 },
-  { category: 'Healthcare', amount: 150, budget: 200, percentage: 75 },
-];
+interface SpendingTrendData {
+  month: string;
+  amount: number;
+}
 
-const investmentPerformanceData = [
-  { month: 'Jan', portfolio: 15000, benchmark: 15200 },
-  { month: 'Feb', portfolio: 15800, benchmark: 15600 },
-  { month: 'Mar', portfolio: 16200, benchmark: 15900 },
-  { month: 'Apr', portfolio: 17100, benchmark: 16500 },
-  { month: 'May', portfolio: 17800, benchmark: 17200 },
-  { month: 'Jun', portfolio: 18500, benchmark: 17800 },
-];
+interface CategorySpendingData {
+  category: string;
+  amount: number;
+  budget: number;
+  percentage: number;
+}
+
+interface InvestmentPerformanceData {
+  month: string;
+  portfolio: number;
+  benchmark: number;
+}
+
+interface Insight {
+  id: number;
+  type: 'opportunity' | 'warning' | 'success';
+  title: string;
+  description: string;
+  impact: string;
+  priority: 'high' | 'medium' | 'low';
+  category: string;
+}
 
 const Insights = () => {
-  const insights = [
+  const [spendingTrendData, setSpendingTrendData] = useState<SpendingTrendData[]>([]);
+  const [categorySpendingData, setCategorySpendingData] = useState<CategorySpendingData[]>([]);
+  const [investmentPerformanceData, setInvestmentPerformanceData] = useState<InvestmentPerformanceData[]>([]);
+  const [insights, setInsights] = useState<Insight[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchInsightsData = async () => {
+      try {
+        setLoading(true);
+        // TODO: Implement API calls to fetch data
+        // const spendingResponse = await api.getSpendingTrend();
+        // setSpendingTrendData(spendingResponse.data);
+        // const categoryResponse = await api.getCategorySpending();
+        // setCategorySpendingData(categoryResponse.data);
+        // const investmentResponse = await api.getInvestmentPerformance();
+        // setInvestmentPerformanceData(investmentResponse.data);
+        // const insightsResponse = await api.getInsights();
+        // setInsights(insightsResponse.data);
+      } catch (err) {
+        setError('Failed to load insights data. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInsightsData();
+  }, []);
+
+  const initialInsights = [
     {
       id: 1,
       type: 'opportunity',
@@ -133,41 +167,54 @@ const Insights = () => {
       {/* AI Insights */}
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">AI-Powered Insights</h2>
-        <div className="grid gap-4">
-          {insights.map((insight) => (
-            <Card key={insight.id}>
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-3">
-                    {getInsightIcon(insight.type)}
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold">{insight.title}</h3>
-                        {getPriorityBadge(insight.priority)}
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-2">
-                        {insight.description}
-                      </p>
-                      <div className="flex items-center gap-4">
-                        <Badge variant="outline">{insight.category}</Badge>
-                        <span className={`text-sm font-medium ${
-                          insight.type === 'success' ? 'text-green-600' : 
-                          insight.type === 'warning' ? 'text-amber-600' : 
-                          'text-blue-600'
-                        }`}>
-                          {insight.impact}
-                        </span>
+        {loading ? (
+          <div className="text-center py-8">Loading AI insights...</div>
+        ) : error ? (
+          <div className="text-center py-8 text-destructive">{error}</div>
+        ) : insights.length === 0 ? (
+          <Card>
+            <CardContent className="p-6 text-center text-muted-foreground">
+              <p>No insights available yet</p>
+              <p className="text-sm">Connect your accounts to receive personalized financial insights</p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid gap-4">
+            {insights.map((insight) => (
+              <Card key={insight.id}>
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      {getInsightIcon(insight.type)}
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h3 className="font-semibold">{insight.title}</h3>
+                          {getPriorityBadge(insight.priority)}
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-2">
+                          {insight.description}
+                        </p>
+                        <div className="flex items-center gap-4">
+                          <Badge variant="outline">{insight.category}</Badge>
+                          <span className={`text-sm font-medium ${
+                            insight.type === 'success' ? 'text-green-600' : 
+                            insight.type === 'warning' ? 'text-amber-600' : 
+                            'text-blue-600'
+                          }`}>
+                            {insight.impact}
+                          </span>
+                        </div>
                       </div>
                     </div>
+                    <Button variant="outline" size="sm">
+                      Take Action
+                    </Button>
                   </div>
-                  <Button variant="outline" size="sm">
-                    Take Action
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Analytics Tabs */}
@@ -180,148 +227,200 @@ const Insights = () => {
         </TabsList>
 
         <TabsContent value="spending" className="space-y-4">
-          <div className="grid gap-6 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Spending Trend</CardTitle>
-                <CardDescription>Your monthly spending over time</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={spendingTrendData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip formatter={(value) => [`$${value}`, 'Spending']} />
-                    <Area type="monotone" dataKey="amount" stroke="#2563eb" fill="#2563eb" fillOpacity={0.2} />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Category Breakdown</CardTitle>
-                <CardDescription>How you're spending by category</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {categorySpendingData.map((category) => (
-                    <div key={category.category} className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium">{category.category}</span>
-                        <span className="text-sm text-muted-foreground">
-                          ${category.amount} / ${category.budget}
-                        </span>
-                      </div>
-                      <div className="w-full bg-muted rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full ${
-                            category.percentage > 100 ? 'bg-red-500' : 'bg-blue-500'
-                          }`}
-                          style={{ width: `${Math.min(category.percentage, 100)}%` }}
-                        />
-                      </div>
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>{category.percentage}% used</span>
-                        <span className={category.percentage > 100 ? 'text-red-600' : ''}>
-                          {category.percentage > 100 ? 'Over budget' : 'On track'}
-                        </span>
-                      </div>
+          {loading ? (
+            <div className="text-center py-8">Loading spending data...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-destructive">{error}</div>
+          ) : (
+            <div className="grid gap-6 lg:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Spending Trend</CardTitle>
+                  <CardDescription>Your monthly spending over time</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {spendingTrendData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <AreaChart data={spendingTrendData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <Tooltip formatter={(value) => [`$${value}`, 'Spending']} />
+                        <Area type="monotone" dataKey="amount" stroke="#2563eb" fill="#2563eb" fillOpacity={0.2} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <p>No spending data available</p>
+                      <p className="text-sm">Connect your accounts to see spending trends</p>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Category Breakdown</CardTitle>
+                  <CardDescription>How you're spending by category</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {categorySpendingData.length > 0 ? (
+                    <div className="space-y-4">
+                      {categorySpendingData.map((category) => (
+                        <div key={category.category} className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">{category.category}</span>
+                            <span className="text-sm text-muted-foreground">
+                              ${category.amount} / ${category.budget}
+                            </span>
+                          </div>
+                          <div className="w-full bg-muted rounded-full h-2">
+                            <div
+                              className={`h-2 rounded-full ${
+                                category.percentage > 100 ? 'bg-red-500' : 'bg-blue-500'
+                              }`}
+                              style={{ width: `${Math.min(category.percentage, 100)}%` }}
+                            />
+                          </div>
+                          <div className="flex justify-between text-xs text-muted-foreground">
+                            <span>{category.percentage}% used</span>
+                            <span className={category.percentage > 100 ? 'text-red-600' : ''}>
+                              {category.percentage > 100 ? 'Over budget' : 'On track'}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <p>No category data available</p>
+                      <p className="text-sm">Connect your accounts to see spending by category</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="budget" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Budget Performance</CardTitle>
-              <CardDescription>Track your budget vs actual spending</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={categorySpendingData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="category" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="budget" fill="#e5e7eb" name="Budget" />
-                  <Bar dataKey="amount" fill="#2563eb" name="Actual" />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          {loading ? (
+            <div className="text-center py-8">Loading budget data...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-destructive">{error}</div>
+          ) : categorySpendingData.length === 0 ? (
+            <Card>
+              <CardContent className="p-6 text-center text-muted-foreground">
+                <p>No budget data available</p>
+                <p className="text-sm">Set up your budget categories to track spending</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>Budget Performance</CardTitle>
+                <CardDescription>Track your budget vs actual spending</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={400}>
+                  <BarChart data={categorySpendingData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="category" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="budget" fill="#e5e7eb" name="Budget" />
+                    <Bar dataKey="amount" fill="#2563eb" name="Actual" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
         <TabsContent value="investments" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Investment Performance</CardTitle>
-              <CardDescription>Portfolio vs market benchmark</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={investmentPerformanceData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip formatter={(value) => [`$${value}`, '']} />
-                  <Line type="monotone" dataKey="portfolio" stroke="#2563eb" strokeWidth={2} name="Your Portfolio" />
-                  <Line type="monotone" dataKey="benchmark" stroke="#64748b" strokeWidth={2} strokeDasharray="5 5" name="Market Benchmark" />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          {loading ? (
+            <div className="text-center py-8">Loading investment data...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-destructive">{error}</div>
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>Investment Performance</CardTitle>
+                <CardDescription>Portfolio vs market benchmark</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {investmentPerformanceData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={400}>
+                    <LineChart data={investmentPerformanceData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip formatter={(value) => [`$${value}`, '']} />
+                      <Line type="monotone" dataKey="portfolio" stroke="#2563eb" strokeWidth={2} name="Your Portfolio" />
+                      <Line type="monotone" dataKey="benchmark" stroke="#64748b" strokeWidth={2} strokeDasharray="5 5" name="Market Benchmark" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <p>No investment data available</p>
+                    <p className="text-sm">Connect your investment accounts to track performance</p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
         <TabsContent value="goals" className="space-y-4">
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Emergency Fund</CardTitle>
-                <CardDescription>3-6 months of expenses</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span>Progress</span>
-                    <span className="font-medium">$6,800 / $10,000</span>
+          {loading ? (
+            <div className="text-center py-8">Loading financial goals...</div>
+          ) : error ? (
+            <div className="text-center py-8 text-destructive">{error}</div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Emergency Fund</CardTitle>
+                  <CardDescription>3-6 months of expenses</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span>Progress</span>
+                      <span className="font-medium">Set up a goal</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-3">
+                      <div className="bg-blue-500 h-3 rounded-full" style={{ width: '0%' }} />
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Set up an emergency fund goal to track progress
+                    </div>
                   </div>
-                  <div className="w-full bg-muted rounded-full h-3">
-                    <div className="bg-blue-500 h-3 rounded-full" style={{ width: '68%' }} />
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    68% complete • $3,200 remaining
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Retirement Savings</CardTitle>
-                <CardDescription>401(k) + IRA contributions</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span>Annual Goal</span>
-                    <span className="font-medium">$12,000 / $15,000</span>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Retirement Savings</CardTitle>
+                  <CardDescription>401(k) + IRA contributions</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span>Annual Goal</span>
+                      <span className="font-medium">Set up a goal</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-3">
+                      <div className="bg-green-500 h-3 rounded-full" style={{ width: '0%' }} />
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Set up a retirement savings goal to track progress
+                    </div>
                   </div>
-                  <div className="w-full bg-muted rounded-full h-3">
-                    <div className="bg-green-500 h-3 rounded-full" style={{ width: '80%' }} />
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    80% complete • $3,000 remaining
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>

@@ -15,26 +15,23 @@ import {
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { useAuth } from '@/contexts/AuthContext';
 
-// TODO: Replace with real data from backend API
-const netWorthData = [
-  { month: 'Jan', value: 0 },
-  { month: 'Feb', value: 0 },
-  { month: 'Mar', value: 0 },
-  { month: 'Apr', value: 0 },
-  { month: 'May', value: 0 },
-  { month: 'Jun', value: 0 },
-];
+import { useState, useEffect } from 'react';
 
-const spendingData = [
-  { name: 'Housing', value: 0, color: '#2563eb' },
-  { name: 'Food', value: 0, color: '#7c3aed' },
-  { name: 'Transport', value: 0, color: '#dc2626' },
-  { name: 'Entertainment', value: 0, color: '#059669' },
-  { name: 'Other', value: 0, color: '#ea580c' },
-];
+interface NetWorthDataPoint {
+  month: string;
+  value: number;
+}
+
+interface SpendingDataPoint {
+  name: string;
+  value: number;
+  color: string;
+}
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const [netWorthData, setNetWorthData] = useState<NetWorthDataPoint[]>([]);
+  const [spendingData, setSpendingData] = useState<SpendingDataPoint[]>([]);
 
   return (
     <div className="space-y-6">
