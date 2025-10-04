@@ -1,0 +1,2 @@
+mv d:\College\MCP\future-finance-ai-pwa\src\services\aiService.ts d:\College\MCP\future-finance-ai-pwa\src\services\aiService.ts.bak
+mv d:\College\MCP\future-finance-ai-pwa\src\services\aiService.ts.new d:\College\MCP\future-finance-ai-pwa\src\services\aiService.ts
